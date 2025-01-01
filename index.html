@@ -152,7 +152,13 @@
 
             <!-- Search Box -->
             <div class="mb-3">
-                <input type="text" class="form-control" id="searchInput" placeholder="SEARCH CLIENTS..." aria-label="Search clients">
+                <label for="searchInput" class="visually-hidden">Search clients</label>
+                <input type="text" 
+                       class="form-control" 
+                       id="searchInput" 
+                       placeholder="SEARCH CLIENTS..." 
+                       aria-label="Search clients"
+                       autocomplete="off">
                 <div id="searchFeedback" class="invalid-feedback">
                     No matching clients found.
                 </div>
@@ -163,6 +169,11 @@
                 <!-- ITR Clients Table -->
                 <div id="itrList" class="client-list active">
                     <div class="table-responsive">
+                        <div class="loading-overlay d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
                         <table class="table table-striped uppercase-table">
                             <thead>
                                 <tr>
@@ -188,6 +199,11 @@
                 <!-- GST Clients Table -->
                 <div id="gstList" class="client-list">
                     <div class="table-responsive">
+                        <div class="loading-overlay d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
                         <table class="table table-striped uppercase-table">
                             <thead>
                                 <tr>
@@ -209,6 +225,11 @@
                 <!-- DSC Clients Table -->
                 <div id="dscList" class="client-list">
                     <div class="table-responsive">
+                        <div class="loading-overlay d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
                         <table class="table table-striped uppercase-table">
                             <thead>
                                 <tr>
@@ -232,6 +253,11 @@
                 <!-- Udyam Clients Table -->
                 <div id="udyamList" class="client-list">
                     <div class="table-responsive">
+                        <div class="loading-overlay d-none">
+                            <div class="spinner-border text-primary" role="status">
+                                <span class="visually-hidden">Loading...</span>
+                            </div>
+                        </div>
                         <table class="table table-striped uppercase-table">
                             <thead>
                                 <tr>
@@ -272,22 +298,37 @@
                                 <div class="mb-3">
                                     <label for="fullName" class="form-label">Full Name</label>
                                     <input type="text" class="form-control" id="fullName" value="John Doe" required>
+                                    <div class="invalid-feedback">
+                                        This field is required.
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" class="form-control" id="email" value="john@example.com" required>
+                                    <div class="invalid-feedback">
+                                        This field is required.
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="phone" class="form-label">Phone</label>
                                     <input type="tel" class="form-control" id="phone" value="1234567890" required>
+                                    <div class="invalid-feedback">
+                                        This field is required.
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="dob" class="form-label">Date of Birth</label>
                                     <input type="date" class="form-control" id="dob" required>
+                                    <div class="invalid-feedback">
+                                        This field is required.
+                                    </div>
                                 </div>
                                 <div class="mb-3">
                                     <label for="address" class="form-label">Address</label>
                                     <textarea class="form-control" id="address" rows="3"></textarea>
+                                    <div class="invalid-feedback">
+                                        This field is required.
+                                    </div>
                                 </div>
                                 <button type="submit" class="btn btn-primary">Update Profile</button>
                             </form>

@@ -106,6 +106,24 @@ function showClientModal(clientType, clientData = null) {
     const modalBody = modal.querySelector('.modal-body');
     modalBody.innerHTML = getClientForm(clientType);
 
+    // Add password toggle event listeners after form is added to DOM
+    modalBody.querySelectorAll('.password-toggle').forEach(button => {
+        button.addEventListener('click', function() {
+            const input = this.closest('.input-group').querySelector('input');
+            const icon = this.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        });
+    });
+
     if (clientData) {
         fillFormData(modalBody, clientData);
         modal.querySelector('.modal-title').textContent = 'EDIT CLIENT';
@@ -430,11 +448,18 @@ function getColumnsForClientType(clientType) {
     }
 }
 
-// Edit client
+// Improved editClient function
 function editClient(clientType, id) {
-    const client = clients[clientType].find(c => c.id === id);
-    if (client) {
+    try {
+        const client = clients[clientType].find(c => c.id === id);
+        if (!client) {
+            Swal.fire('Error', 'Client not found', 'error');
+            return;
+        }
         showClientModal(clientType, client);
+    } catch (error) {
+        console.error('Edit error:', error);
+        Swal.fire('Error', 'Failed to edit client', 'error');
     }
 }
 
@@ -478,28 +503,22 @@ function handleSearch(e) {
     updateClientTable(clientType, filteredClients);
 }
 
-// Function to filter client lists based on search input
+// Improved filterClients function
 function filterClients() {
     const searchInput = document.getElementById('searchInput');
-    const filter = searchInput.value.toLowerCase();
-    const clientLists = document.querySelectorAll('.client-list'); // Assuming client lists have this class
-
-    clientLists.forEach(list => {
-        const items = list.getElementsByTagName('tr'); // Assuming each client is in a table row
-        for (let i = 0; i < items.length; i++) {
-            const cells = items[i].getElementsByTagName('td');
-            let match = false;
-            for (let j = 0; j < cells.length; j++) {
-                if (cells[j]) {
-                    const textValue = cells[j].textContent || cells[j].innerText;
-                    if (textValue.toLowerCase().indexOf(filter) > -1) {
-                        match = true;
-                        break;
-                    }
-                }
-            }
-            items[i].style.display = match ? '' : 'none';
-        }
+    if (!searchInput) return;
+    
+    const filter = searchInput.value.toUpperCase();
+    const activeList = document.querySelector('.client-list.active');
+    if (!activeList) return;
+    
+    const items = activeList.getElementsByTagName('tr');
+    Array.from(items).forEach(item => {
+        const cells = item.getElementsByTagName('td');
+        const match = Array.from(cells).some(cell => 
+            (cell.textContent || cell.innerText).toUpperCase().includes(filter)
+        );
+        item.style.display = match ? '' : 'none';
     });
 }
 
@@ -513,24 +532,34 @@ function updateClientCounts() {
     });
 }
 
-// Export to Excel
+// Improved exportToExcel function
 function exportToExcel() {
-    const reportType = document.getElementById('reportType').value;
-    if (!reportType) {
-        alert('Please select a report type');
-        return;
-    }
+    try {
+        const reportType = document.getElementById('reportType').value;
+        if (!reportType) {
+            Swal.fire('Error', 'Please select a report type', 'error');
+            return;
+        }
 
-    const data = clients[reportType].map(client => {
-        const newClient = {...client};
-        delete newClient.id;
-        return newClient;
-    });
-    
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, reportType.toUpperCase());
-    XLSX.writeFile(wb, `${reportType.toUpperCase()}_CLIENTS.xlsx`);
+        if (!clients[reportType] || !clients[reportType].length) {
+            Swal.fire('Error', 'No data available for export', 'error');
+            return;
+        }
+
+        const data = clients[reportType].map(client => {
+            const newClient = {...client};
+            delete newClient.id;
+            return newClient;
+        });
+        
+        const ws = XLSX.utils.json_to_sheet(data);
+        const wb = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(wb, ws, reportType.toUpperCase());
+        XLSX.writeFile(wb, `${reportType.toUpperCase()}_CLIENTS.xlsx`);
+    } catch (error) {
+        console.error('Export error:', error);
+        Swal.fire('Error', 'Failed to export data', 'error');
+    }
 }
 
 // Load sample data

@@ -462,6 +462,18 @@ h6 { font-size: 1rem; }
     .client-card {
         margin-bottom: 1rem;
     }
+    
+    .table-responsive {
+        margin: 0;
+        padding: 0;
+        border: none;
+    }
+    
+    .table td, 
+    .table th {
+        white-space: nowrap;
+        min-width: 100px;
+    }
 }
 
 /* Modal Styles */
@@ -481,6 +493,17 @@ h6 { font-size: 1rem; }
 @media (max-width: 992px) {
     .modal-lg {
         max-width: 95%;
+    }
+}
+
+@media (max-width: 576px) {
+    .modal-dialog {
+        margin: 0.5rem;
+        max-width: calc(100% - 1rem);
+    }
+    
+    .modal-body {
+        padding: 1rem;
     }
 }
 
@@ -518,4 +541,13 @@ h6 { font-size: 1rem; }
     .table td, .table th {
         background-color: #fff !important;
     }
+}
+
+/* Improve accessibility */
+.btn:focus,
+.form-control:focus,
+.nav-link:focus {
+    outline: 2px solid var(--primary-color);
+    outline-offset: 2px;
+    box-shadow: none;
 }
